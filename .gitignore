@@ -131,7 +131,7 @@ dmypy.json
 #Pycharm
 .idea/
 
-viaServer.db
+*.db
 old/
 store/*
 Debug.py
@@ -142,3 +142,4 @@ migrations/*
 *replace_path.py
 *_old
 * — копия*
+*forms.py

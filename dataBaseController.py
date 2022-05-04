@@ -12,14 +12,23 @@ def get_user_id_by_name(username):
     return User.query.filter_by(username=username).first().id
 
 
-def add_user(name, password, rights="user"):
-    if user_exist(name):
+def update_user_token(name, token):
+    if not user_exist(name):
         return "wrong name"
-    u = User(username=name, rights=rights)
-    u.set_password(password)
-    db.session.add(u)
+    u = get_user(name)
+    u.refresh_token = token
     db.session.commit()
     return "success!"
+
+
+def add_user(name, rf_token="", token=""):
+    if user_exist(name):
+        return None
+    u = User(username=name, refresh_token=rf_token, token=token)
+    # u.set_password(password)
+    db.session.add(u)
+    db.session.commit()
+    return u
 
 
 def delete_user(name):

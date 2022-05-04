@@ -3,6 +3,8 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from app.controllers.API import Api_path as api
+from app.controllers import login_controller as lc
 
 app = Flask(__name__)
 app.config.from_object(Config)

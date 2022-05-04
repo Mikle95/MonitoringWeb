@@ -9,26 +9,40 @@
 <body>
 <div>
 	<img src="static/data/sample-logo.png" width="150" alt="" id="logo" />
+
     <form class="menu" action="logout">
-        <p><input type="submit" value="Выход" /></p>
+        <p><input type="submit" class="menu_button" value="Выход" /></p>
     </form>
 
     <form class="menu" action="statistics">
-        <p><input type="submit" value="Общая статистика" /></p>
+        <p><input type="submit" class="menu_button" value="Общая статистика" /></p>
     </form>
 
     <form class="menu" action="add_user_page">
-        <p><input type="submit" value="Регистрация сотрудника" /></p>
+        <p><input type="submit" class="menu_button" value="Регистрация сотрудника" /></p>
     </form>
 </div>
-<div id="user_list">
-		
+<div>
+<table class="table">
+  <tbody>
+    <tr>
+      <td id="user_list">
+          <div>
+              <p class="username">Username</p>
+              <button>Click</button>
+          </div>
+      </td>
+      <td id="project_list"></td>
+    </tr>
+  </tbody>
+</table>
+
 </div>
-<script src="static/js/main.js"></script>
+    <script src="static/js/main.js"></script>
 	<script>
       var container = document.getElementById('via_container');
-      url = "http://127.0.0.1:5000/";
-      var via = new main(container, url);
+      {#url = "http://127.0.0.1:5000/";#}
+      var via = new main(container, '{{ url }}', '{{ api_url }}', '{{ token }}');
     </script>
 </body>
 </html>

@@ -1,3 +1,47 @@
 @charset "utf-8";
 /* CSS Document */
-.menu {float: right; margin-right: 10px}
+html {background-color: antiquewhite;
+}
+
+.table {
+    width: 100%;
+    border: 0;
+}
+
+.menu {
+    float: right; 
+    margin-right: 10px;
+
+}
+
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.menu_button {
+    color: white;
+    background-color: purple;
+    border-width: 0;
+}
+
+.username{
+    float:left;
+}
+
+#logo_login{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+#user_list {
+    background-color: aquamarine;
+    width: 50%;
+}
+#project_list {
+    background-color: chartreuse;
+    width: 50%;
+}
