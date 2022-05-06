@@ -20,9 +20,7 @@ def login():
                 flash('No connection to server' if response is None else response.json()["message"])
                 return redirect(url_for('login'))
             user = dataBaseController.add_user(name, response.json()["refresh_token"], response.json()["token"])
-        else:
-            print("TODO update token")
-            # TODO update token
+
         login_user(user)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -48,14 +46,31 @@ def echo(text):
 @app.route('/main_page')
 @login_required
 def main_page():
-    # TODO - проверка на время токена
+    flag, ret = refresh()
+    if not flag:
+        return ret
+
     return render_template("monitoring_main.html", api_url=api.api_host, token=current_user.token, url=api.url)
+
+
+def refresh():
+    response = lc.refresh(current_user.refresh_token)
+    if response is None:
+        return False, redirect("No connection to server")
+    elif response.status_code != 200:
+        logout_user()
+        flash(str(response.status_code))
+        return False, redirect("login")
+    dataBaseController.update_user_token(current_user.username, response.json()["refresh_token"],
+                                         response.json()["token"])
+    return False, current_user.token
 
 
 @app.route('/refresh_token')
 @login_required
 def refresh_token():
-    return lc.refresh(current_user.refresh_token)
+    flag, ret = refresh()
+    return ret
 
 
 # @app.route('/get_all_users/', methods=["GET", "POST"])

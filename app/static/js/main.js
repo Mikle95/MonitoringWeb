@@ -1,8 +1,7 @@
-function main(container, url, api, token) {
+function main(url, api, token) {
 	this.web_url = url;
     this.api_url = api;
     this.token = token;
-	this.c = container;
 	this.user_list = document.getElementById("user_list");
     this.project_list = document.getElementById("project_list");
     

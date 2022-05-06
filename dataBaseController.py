@@ -12,11 +12,12 @@ def get_user_id_by_name(username):
     return User.query.filter_by(username=username).first().id
 
 
-def update_user_token(name, token):
+def update_user_token(name, rf_token, token):
     if not user_exist(name):
         return "wrong name"
     u = get_user(name)
-    u.refresh_token = token
+    u.refresh_token = rf_token
+    u.token = token
     db.session.commit()
     return "success!"
 

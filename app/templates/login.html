@@ -8,6 +8,11 @@
 
 <body>
     <img src="../static/data/sample-logo.png" width="150" alt="" id="logo_login" />
+
+    {% for message in get_flashed_messages() %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+
     <form action="#" method="post" class="center">
         <p>Login:</p>
         <p><input type="text" name="nm" /></p>
@@ -15,5 +20,9 @@
         <p><input type="password" name="pw" /></p>
         <p><input type="submit" value="Вход" /></p>
     </form>
+
+    <script>
+
+    </script>
 </body>
 </html>

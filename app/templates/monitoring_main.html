@@ -40,9 +40,8 @@
 </div>
     <script src="static/js/main.js"></script>
 	<script>
-      var container = document.getElementById('via_container');
       {#url = "http://127.0.0.1:5000/";#}
-      var via = new main(container, '{{ url }}', '{{ api_url }}', '{{ token }}');
+      var via = new main('{{ url }}', '{{ api_url }}', '{{ token }}');
     </script>
 </body>
 </html>
