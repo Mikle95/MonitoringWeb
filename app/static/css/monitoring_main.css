@@ -37,11 +37,15 @@ html {background-color: antiquewhite;
     transform: translate(-50%);
 }
 
+.column {
+    width: 50%;
+    max-width: 50%;
+}
+
 #user_list {
     background-color: aquamarine;
-    width: 50%;
 }
+
 #project_list {
     background-color: chartreuse;
-    width: 50%;
 }

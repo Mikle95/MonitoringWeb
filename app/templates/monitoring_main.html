@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <title>Мониторинг сотрудников - главная</title>
-<link href="static/css/monitoring_main.css" rel="stylesheet" type="text/css">
+<link href="../static/css/monitoring_main.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
 <div>
-	<img src="static/data/sample-logo.png" width="150" alt="" id="logo" />
+	<img src="../static/data/sample-logo.png" width="150" alt="" id="logo" />
 
     <form class="menu" action="logout">
         <p><input type="submit" class="menu_button" value="Выход" /></p>
@@ -26,19 +26,25 @@
 <table class="table">
   <tbody>
     <tr>
-      <td id="user_list">
+      <td id="user_list" class="column">
           <div>
-              <p class="username">Username</p>
+              <p class="username">
+                  username
+              </p>
               <button>Click</button>
           </div>
       </td>
-      <td id="project_list"></td>
+      <td id="project_list" class="column"></td>
     </tr>
   </tbody>
 </table>
 
 </div>
-    <script src="static/js/main.js"></script>
+    <script src="../static/js/data.js"></script>
+    <script src="../static/js/api.js"></script>
+    <script src="../static/js/project_list.js"></script>
+    <script src="../static/js/workers_list.js"></script>
+    <script src="../static/js/main.js"></script>
 	<script>
       {#url = "http://127.0.0.1:5000/";#}
       var via = new main('{{ url }}', '{{ api_url }}', '{{ token }}');

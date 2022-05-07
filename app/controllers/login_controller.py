@@ -28,7 +28,7 @@ def login(username, password):
 def refresh(rf_token):
     params = {"refresh_token": rf_token}
     try:
-        return requests.post(api.refresh, params=params)
+        return requests.get(api.refresh, params=params)
     except:
         return None
 

@@ -1,3 +1,5 @@
+import requests
+
 from app import app, lc, api
 from app.models import User
 from flask import jsonify, request, render_template, redirect, url_for, flash
@@ -13,13 +15,12 @@ def login():
     if request.method == "POST":
         name = request.form["nm"]
         password = request.form["pw"]
-        user = User.query.filter_by(username=name).first()
-        if user is None:
-            response = lc.login(name, password)
-            if response is None or response.status_code != 200:
-                flash('No connection to server' if response is None else response.json()["message"])
-                return redirect(url_for('login'))
-            user = dataBaseController.add_user(name, response.json()["refresh_token"], response.json()["token"])
+        response = lc.login(name, password)
+        if response is None or response.status_code != 200:
+            flash('No connection to server' if response is None else response.json()["message"])
+            return redirect(url_for('login'))
+
+        user = dataBaseController.add_or_update_user(name, response.json()["refresh_token"], response.json()["token"])
 
         login_user(user)
         next_page = request.args.get('next')
@@ -59,11 +60,11 @@ def refresh():
         return False, redirect("No connection to server")
     elif response.status_code != 200:
         logout_user()
-        flash(str(response.status_code))
+        flash(str(response.json()["message"]))
         return False, redirect("login")
     dataBaseController.update_user_token(current_user.username, response.json()["refresh_token"],
                                          response.json()["token"])
-    return False, current_user.token
+    return True, current_user.token
 
 
 @app.route('/refresh_token')
@@ -86,6 +87,20 @@ def refresh_token():
 @login_required
 def test_post():
     return request.data
+
+
+@app.route('/api/', methods=["POST"])
+@login_required
+def api_request():
+    data = request.json
+    try:
+        if data["type"].lower() == "get":
+            return requests.get(data["url"], params=data["params"]).text
+        if data["type"].lower() == "post":
+            return requests.post(data["url"], json=data["body"], params=data["params"]).text
+    except:
+        flash("No connection to server")
+        return None
 
 
 @app.route('/')
