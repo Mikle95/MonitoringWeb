@@ -1,4 +1,5 @@
-function workers_list(container, api){
+function workers_list(container, api, username=null){
+    this.username = username;
     this.api = api;
     this.data = null;
     this.c = container;
@@ -6,22 +7,28 @@ function workers_list(container, api){
 }
 
 workers_list.prototype.fill_list = function (){
+    var body = this.username != null ? {'login': this.username} : null;
+    var type = this.username != null ? "POST" : "GET";
     this.api.sendRequest(this.api.get_token_params(), this.api.path_myWorkers, function (request){
         this.data = JSON.parse(request.response);
         // alert(this.data);
         for (const worker of this.data){
             this.init_worker_UI(worker);
         }
-    }.bind(this));
+    }.bind(this), body, type);
 }
 
 workers_list.prototype.init_worker_UI = function(worker){
-    // var body = {"login": worker["login"]};
-    // this.api.sendRequest(this.api.get_token_params(), this.api.path_user_activity, function (request){
-    //     JSON.parse(request.response);
-    // }.bind(this), body, "POST")
     var container = document.createElement('div');
-    container.innerText = JSON.stringify(worker);
-    container.setAttribute('class', 'column')
+    var line1 = document.createElement('div');
+    line1.innerText = worker["user_name"] + "\t" + worker["permissions"];
+    var line2 = document.createElement('div');
+    line2.innerText = worker["login"] + "\t" + "часы: " + worker["hours"];
+
+    container.appendChild(line1);
+    container.appendChild(line2);
+
+    var styleClass = 'row ' + (worker["is_active"] ? 'active' : 'inactive');
+    container.setAttribute('class', styleClass);
     this.c.appendChild(container);
 }

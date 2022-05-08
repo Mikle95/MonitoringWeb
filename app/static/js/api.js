@@ -11,7 +11,7 @@ function api(url, host, token){
 
 api.prototype.sendRequest = function(params, path, callback, body=null, type="GET") {
     var request = new XMLHttpRequest();
-    var req_body = get_request_body(path, type, params, null);
+    var req_body = get_request_body(path, type, params, body);
     request.open('POST', "api", true);
     request.setRequestHeader('Content-type', "application/json;charset=UTF-8");
     request.addEventListener("readystatechange", () => {

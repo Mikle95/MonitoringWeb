@@ -12,6 +12,14 @@ def get_user_id_by_name(username):
     return User.query.filter_by(username=username).first().id
 
 
+def add_or_update_user(name, rf_token, token):
+    if user_exist(name):
+        update_user_token(name, rf_token, token)
+    else:
+        add_user(name, rf_token, token)
+    return get_user(name)
+
+
 def update_user_token(name, rf_token, token):
     if not user_exist(name):
         return "wrong name"
