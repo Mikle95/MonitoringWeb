@@ -30,5 +30,15 @@ workers_list.prototype.init_worker_UI = function(worker){
 
     var styleClass = 'row ' + (worker["is_active"] ? 'active' : 'inactive');
     container.setAttribute('class', styleClass);
+
+    container.addEventListener('click', this.popup_user.bind(this, worker));
+
     this.c.appendChild(container);
+}
+
+workers_list.prototype.popup_user = function (user){
+    const popup = document.querySelector('.popup');
+    const container = document.getElementById("popup_screen");
+    container.innerText = JSON.stringify(user) ///TODO;
+    popup.classList.add("popup_open");
 }

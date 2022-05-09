@@ -9,3 +9,11 @@ function main(url, host, token) {
 main.prototype.makeToast = function () {
     alert("Чего ты этим хотел добиться?");
 }
+
+popup_close = function () {
+    const popup = document.querySelector('.popup');
+    const container = document.getElementById("popup_screen");
+
+    container.innerHTML = "";
+    popup.setAttribute('class', 'popup');
+}

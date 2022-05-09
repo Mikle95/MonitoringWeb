@@ -32,6 +32,13 @@
     </tr>
 </table>
 </div>
+<div class="popup" onclick="popup_close()">
+    <div class="popup__container" >
+        <div id="popup_screen" class="popup__wrapper"></div>
+    </div>
+    
+</div>
+    
     <script src="../static/js/data.js"></script>
     <script src="../static/js/api.js"></script>
     <script src="../static/js/project_list.js"></script>
@@ -39,7 +46,7 @@
     <script src="../static/js/main.js"></script>
 	<script>
       {#url = "http://127.0.0.1:5000/";#}
-      var via = new main('{{ url }}', '{{ api_url }}', '{{ token }}');
+      var controller = new main('{{ url }}', '{{ api_url }}', '{{ token }}');
     </script>
 </body>
 </html>
