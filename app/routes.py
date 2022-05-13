@@ -2,10 +2,21 @@ import requests
 
 from app import app, lc, api
 from app.models import User
-from flask import jsonify, request, render_template, redirect, url_for, flash
+from flask import jsonify, request, render_template, redirect, url_for, flash, Response
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 import dataBaseController
+
+
+@app.route('/register/', methods=["GET"])
+def register():
+    # if request.method == "POST":
+    #     name = request.form["nm"]
+    #     password = request.form["pw"]
+    #     # response = lc.login(name, password)
+    #     return redirect(url_for('main_page'))
+    # else:
+    return render_template("register.html", api_url=api.api_host, token=current_user.token, url=api.url)
 
 
 @app.route('/login/', methods=["POST", "GET"])
@@ -99,8 +110,7 @@ def api_request():
         if data["type"].lower() == "post":
             return requests.post(data["url"], json=data["body"], params=data["params"]).text
     except:
-        flash("No connection to server")
-        return None
+        return Response("No connection", 204)
 
 
 @app.route('/')

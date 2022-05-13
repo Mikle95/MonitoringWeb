@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Регистрация пользователя</title>
+<link href="../static/css/monitoring_main.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <img src="../static/data/sample-logo.png" width="150" alt="" id="logo_login" />
+
+    {% for message in get_flashed_messages() %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+
+    <form id="register_form" class="center">
+        <table>
+            <tr>
+                <td class="column">
+                    <p>User name:</p>
+                    <p><input type="text" name="unm" /></p>
+                    <p>Login:</p>
+                    <p><input type="text" name="nm" /></p>
+                    <p>Password:</p>
+                    <p><input type="password" name="pw" /></p>
+                    <p>Permissions:</p>
+                    <p>
+                    <select name="pm">
+                        <option>user</option>
+                        <option>manager</option>
+                    </select>
+                    </p>
+                </td>
+                <td class="column">
+                    <p>Boss login:</p>
+                    <p><input id="bl" type="text" name="bl" /></p>
+                    <p>Hours:</p>
+                    <p><input type="number" name="h" value="8"/></p>
+                    <p>Company:</p>
+                    <p><input id="cm" type="text" name="cm" readonly/></p>
+                </td>
+            </tr>
+        </table>
+        <p><input type="submit" value="Зарегистрировать" class="menu_button width-100 height-50px"/></p>
+    </form>
+
+    <script src="../static/js/api.js"></script>
+    <script src="../static/js/register.js"></script>
+    <script>
+        var controller = new register('{{ url }}', '{{ api_url }}', '{{ token }}');
+    </script>
+</body>
+</html>

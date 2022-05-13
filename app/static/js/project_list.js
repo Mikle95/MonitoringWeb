@@ -1,18 +1,17 @@
-function project_list(container, api, username=null){
+function project_list(container, api, data=null, username=null){
     this.username = username;
     this.api = api;
-    this.data = null;
+    this.data = data === null ? {} : data;
     this.c = container;
     this.fill_list();
 }
 
 project_list.prototype.fill_list = function (){
     var body = this.username != null ? {'login': this.username} : null;
-    var type = this.username != null ? "POST" : "GET";
+    var type = this.username != null;
     this.api.sendRequest(this.api.get_token_params(), this.api.path_allProjects, function (request){
-        this.data = JSON.parse(request.response);
-        // alert(this.data);
-        for (const project of this.data){
+        this.data["projects"] = JSON.parse(request.response);
+        for (const project of this.data["projects"]){
             this.init_project_UI(project);
         }
     }.bind(this), body, type);

@@ -7,6 +7,9 @@
 </head>
 
 <body>
+{% for message in get_flashed_messages() %}
+        <script>alert("{{ message }}")</script>
+{% endfor %}
 <div>
 	<img src="../static/data/sample-logo.png" width="150" alt="" id="logo" />
 
@@ -18,7 +21,7 @@
         <p><input type="submit" class="menu_button" value="Общая статистика" /></p>
     </form>
 
-    <form class="menu" action="add_user_page">
+    <form class="menu" action="register">
         <p><input type="submit" class="menu_button" value="Регистрация сотрудника" /></p>
     </form>
 </div>
@@ -26,27 +29,51 @@
 <table class="table">
     <tr>
         <td id="user_list" class="column">
+            <table id="user_template" class="row close">
+                <tr>
+                    <td rowspan="2" width="10%">
+                        <img src="../static/data/no_photo.png" class="user_photo">
+                    </td>
+                    <td class="top_line"></td>
+                    <td class="top_line_2" width="30%"></td>
+                </tr>
+                <tr>
+                    <td class="bottom_line"></td>
+                    <td class="bottom_line_2"></td>
+                </tr>
+            </table>
         </td>
         <td id="project_list" class="column">
         </td>
     </tr>
 </table>
 </div>
-<div class="popup" onclick="popup_close()">
+
+{#<table class="popup popup_open">#}
+{#    <tr>#}
+{#        <td width="30%"></td>#}
+{#        <td></td>#}
+{#        <td width="30%"></td>#}
+{#    </tr>#}
+{#</table>#}
+
+<div id="popup" class="popup">
     <div class="popup__container" >
         <div id="popup_screen" class="popup__wrapper"></div>
     </div>
-    
 </div>
-    
+
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=6b4c979c-e360-4556-bf9e-c2700e70531e&lang=ru_RU">
+	</script>
+
     <script src="../static/js/data.js"></script>
     <script src="../static/js/api.js"></script>
     <script src="../static/js/project_list.js"></script>
     <script src="../static/js/workers_list.js"></script>
     <script src="../static/js/main.js"></script>
 	<script>
-      {#url = "http://127.0.0.1:5000/";#}
-      var controller = new main('{{ url }}', '{{ api_url }}', '{{ token }}');
+      document.getElementById("popup").addEventListener('click', popup_close);
+      var mainController = new main('{{ url }}', '{{ api_url }}', '{{ token }}');
     </script>
 </body>
 </html>
