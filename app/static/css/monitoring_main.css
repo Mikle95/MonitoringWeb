@@ -110,6 +110,10 @@ html {
     max-height: 100px;
 }
 
+.over{
+    background-color: white;
+}
+
 .menu_button {
     color: white;
     background-color: purple;

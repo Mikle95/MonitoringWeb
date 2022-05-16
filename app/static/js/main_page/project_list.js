@@ -1,4 +1,5 @@
-function project_list(container, api, data=null, username=null){
+function project_list(container, api, clickable=false, data=null, username=null){
+    this.clickable = clickable;
     this.username = username;
     this.api = api;
     this.data = data === null ? {} : data;
@@ -7,8 +8,8 @@ function project_list(container, api, data=null, username=null){
 }
 
 project_list.prototype.fill_list = function (){
-    var body = this.username != null ? {'login': this.username} : null;
-    var type = this.username != null;
+    var body = this.username !== null ? {'login': this.username} : null;
+    var type = this.username !== null;
     this.api.sendRequest(this.api.get_token_params(), this.api.path_allProjects, function (request){
         this.data["projects"] = JSON.parse(request.response);
         for (const project of this.data["projects"]){
@@ -30,6 +31,9 @@ project_list.prototype.init_project_UI = function(project){
 
     var styleClass = 'row inactive';
     container.setAttribute('class', styleClass);
+    container.onmouseover = container.onmouseout = overEvent;
+
+    container.onclick = post_redirect.bind(this, "taskmanager", project);
 
     this.c.appendChild(container);
 

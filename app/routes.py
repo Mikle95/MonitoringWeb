@@ -3,19 +3,23 @@ import requests
 from app import app, lc, api
 from app.models import User
 from flask import jsonify, request, render_template, redirect, url_for, flash, Response
+import json
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 import dataBaseController
 
 
+@app.route('/taskmanager/', methods=["POST"])
+@login_required
+def taskmanager():
+    return render_template("taskmanager.html", api_url=api.api_host, token=current_user.token, url=api.url,
+                           name=request.form["project_name"], creator=request.form["project_creator_login"],
+                           description=request.form["project_description"])
+
+
 @app.route('/register/', methods=["GET"])
+@login_required
 def register():
-    # if request.method == "POST":
-    #     name = request.form["nm"]
-    #     password = request.form["pw"]
-    #     # response = lc.login(name, password)
-    #     return redirect(url_for('main_page'))
-    # else:
     return render_template("register.html", api_url=api.api_host, token=current_user.token, url=api.url)
 
 
@@ -85,14 +89,6 @@ def refresh_token():
     return ret
 
 
-# @app.route('/get_all_users/', methods=["GET", "POST"])
-# @login_required
-# def get_all_users():
-#     if current_user.rights != 'admin':
-#         return "Permission denied"
-#     data = dataBaseController.get_all_users()
-#     return jsonify(data)
-
 
 @app.route('/test_post/', methods=["POST"])
 @login_required
@@ -105,10 +101,12 @@ def test_post():
 def api_request():
     data = request.json
     try:
+        out = None
         if data["type"].lower() == "get":
-            return requests.get(data["url"], params=data["params"]).text
-        if data["type"].lower() == "post":
-            return requests.post(data["url"], json=data["body"], params=data["params"]).text
+            out = requests.get(data["url"], params=data["params"])
+        elif data["type"].lower() == "post":
+            out = requests.post(data["url"], json=data["body"], params=data["params"])
+        return Response(out.text, out.status_code)
     except:
         return Response("No connection", 204)
 

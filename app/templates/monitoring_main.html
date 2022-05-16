@@ -66,11 +66,12 @@
     <script src="https://api-maps.yandex.ru/2.1/?apikey=6b4c979c-e360-4556-bf9e-c2700e70531e&lang=ru_RU">
 	</script>
 
-    <script src="../static/js/data.js"></script>
+    <script src="../static/js/main_page/data.js"></script>
     <script src="../static/js/api.js"></script>
-    <script src="../static/js/project_list.js"></script>
-    <script src="../static/js/workers_list.js"></script>
-    <script src="../static/js/main.js"></script>
+    <script src="../static/js/additional.js"></script>
+    <script src="../static/js/main_page/project_list.js"></script>
+    <script src="../static/js/main_page/workers_list.js"></script>
+    <script src="../static/js/main_page/main.js"></script>
 	<script>
       document.getElementById("popup").addEventListener('click', popup_close);
       var mainController = new main('{{ url }}', '{{ api_url }}', '{{ token }}');

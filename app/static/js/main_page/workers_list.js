@@ -15,6 +15,7 @@ workers_list.prototype.fill_list = function (){
         for (const worker of this.data["workers"]){
             var worker_ui = this.init_worker_UI(worker);
             worker_ui.addEventListener('click', this._popup_user.bind(this, worker));
+            worker_ui.onmouseover = worker_ui.onmouseout = overEvent;
             this.c.appendChild(worker_ui);
         }
     }.bind(this), body, type);
@@ -62,10 +63,39 @@ workers_list.prototype._popup_user = function (user){
 
 workers_list.prototype.init_target_user_UI = function (worker) {
     const container = this.init_worker_UI(worker);
+    this.add_delete_btn(container, worker);
+    this.sendNotificationLine(container, worker);
     this.add_map(container, worker);
 
-
     return container;
+}
+
+workers_list.prototype.sendNotificationLine = function (container, worker) {
+    let row = document.createElement("tr");
+    let td = document.createElement("td");
+    td.setAttribute("colspan", 3);
+    let text = document.createElement('input');
+    text.setAttribute('type', "text")
+    let btn = document.createElement('button');
+    btn.innerText = "Отправить уведомление";
+    btn.addEventListener('click', function () {
+        this.api.send_notification(worker["login"], text.value);
+    }.bind(this));
+
+    td.append(text, btn);
+    row.appendChild(td);
+    container.appendChild(row);
+}
+
+workers_list.prototype.add_delete_btn = function (container, worker){
+    let line1 = container.querySelector(".top_line_2");
+    let btn = document.createElement('button');
+    btn.innerText = "Удалить";
+    btn.classList.add("menu");
+    btn.addEventListener('click', function () {
+        this.api.delete_user(worker["login"]);
+    }.bind(this));
+    line1.appendChild(btn);
 }
 
 workers_list.prototype.add_map = function(container, worker) {

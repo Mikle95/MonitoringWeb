@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{{ name }}</title>
+<link href="../static/css/monitoring_main.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+{% for message in get_flashed_messages() %}
+        <script>alert("{{ message }}")</script>
+{% endfor %}
+<div>
+	<img src="../static/data/sample-logo.png" width="150" alt="" id="logo" />
+
+    <form class="menu" action="logout">
+        <p><input type="submit" class="menu_button" value="Выход" /></p>
+    </form>
+
+    <form class="menu" action="statistics">
+        <p><input type="submit" class="menu_button" value="Общая статистика" /></p>
+    </form>
+
+</div>
+<table id="project_info" class="table"></table>
+<table id="task_container" class="table">
+</table>
+
+    <script src="../static/js/api.js"></script>
+    <script src="../static/js/additional.js"></script>
+    <script src="../static/js/tasks/taskmanager.js"></script>
+    <script src="../static/js/tasks/projectInfo.js"></script>
+	<script>
+      {#document.getElementById("popup").addEventListener('click', popup_close);#}
+      const API = new api("{{ url }}", "{{ api_url }}", "{{ token }}");
+      let userInfo = null;
+      API.get_user_info(function (request) {
+          userInfo = JSON.parse(request.response);
+      });
+
+      const project_Info = new projectInfo(document.getElementById("project_info"), "{{ name }}", "{{ creator }}", "{{ description }}")
+      const taskController = new taskmanager(document.getElementById("task_container"), project_Info);
+    </script>
+</body>
+</html>
