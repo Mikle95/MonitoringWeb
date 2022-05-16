@@ -12,6 +12,9 @@ import dataBaseController
 @app.route('/taskmanager/', methods=["POST"])
 @login_required
 def taskmanager():
+    flag, ret = refresh()
+    if not flag:
+        return ret
     return render_template("taskmanager.html", api_url=api.api_host, token=current_user.token, url=api.url,
                            name=request.form["project_name"], creator=request.form["project_creator_login"],
                            description=request.form["project_description"])
@@ -86,8 +89,10 @@ def refresh():
 @login_required
 def refresh_token():
     flag, ret = refresh()
-    return ret
-
+    next_page = request.args.get('next')
+    if not next_page or url_parse(next_page).netloc != '' or not flag:
+        next_page = ret
+    return next_page
 
 
 @app.route('/test_post/', methods=["POST"])

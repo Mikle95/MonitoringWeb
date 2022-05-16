@@ -12,6 +12,23 @@ function api(url, host, token){
     this.path_geo = host + "api/v1/geolocation/get"
     this.path_delete_user =  host + "api/v1/delete/user";
     this.path_notification = host + "api/v1/firebase/notification";
+    this.path_update_project = host + "api/v1/update/project";
+    this.path_push_photo = host + "api/v1/photo/register";
+    this.path_get_project_tasks = host + "api/v1/project/task";
+}
+
+api.prototype.get_project_tasks = function (pname, creator, callback) {
+    this.sendRequest(this.get_token_params(), this.path_get_project_tasks, callback,
+        {"project_name": pname, "project_creator_login": creator}, true);
+}
+
+api.prototype.push_photo = function (login, photo, callback) {
+    this.sendRequest(this.get_token_params(), this.path_push_photo, callback,
+        {"photo": photo, "login": login}, true);
+}
+
+api.prototype.update_project = function (project, callback) {
+    this.sendRequest(this.get_token_params(), this.path_update_project, callback, project, true);
 }
 
 api.prototype.get_token_params = function (){
@@ -19,7 +36,7 @@ api.prototype.get_token_params = function (){
 }
 
 api.prototype.get_user_info = function (callback) {
-    this.sendRequest(this.get_token_params(), this.path_myInfo, callback);
+    this.sendRequest(this.get_token_params(), this.path_myInfo, callback, null, false);
 }
 
 api.prototype.register = function (body, callback) {
@@ -43,10 +60,10 @@ api.prototype.send_notification = function (login, message) {
     }.bind(this), body, true);
 }
 
-api.prototype.sendRequest = function(params, path, callback, body=null, is_post=false, async=true) {
+api.prototype.sendRequest = function(params, path, callback, body=null, is_post=false) {
     var request = new XMLHttpRequest();
     var req_body = get_request_body(path, is_post ? "POST" : "GET", params, body);
-    request.open('POST', this.web_url + "api", async);
+    request.open('POST', this.web_url + "api");
     request.setRequestHeader('Content-type', "application/json;charset=UTF-8");
     request.addEventListener("readystatechange", () => {
         if (request.readyState === 4 && request.status === 200) {
@@ -54,8 +71,11 @@ api.prototype.sendRequest = function(params, path, callback, body=null, is_post=
             // alert(JSON.parse(request.response)["user_name"]);
         }
         else
-            if (request.readyState === 4)
+            if (request.readyState === 4) {
                 alert(JSON.parse(request.response)["message"]);
+                if (request.status === 401)
+                    window.location = this.web_url + "refresh_token";
+            }
     })
     request.send(JSON.stringify(req_body));
 }

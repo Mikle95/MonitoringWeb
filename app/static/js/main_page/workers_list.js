@@ -24,7 +24,7 @@ workers_list.prototype.fill_list = function (){
 workers_list.prototype.init_worker_UI = function(worker){
     const container = document.getElementById('user_template').cloneNode(true);
     var line1 = container.querySelector(".top_line");
-    line1.innerText = worker["user_name"] + "\t" + worker["permissions"];
+    line1.innerText = worker["user_name"] + "\t(" + worker["permissions"] + ")";
     var line2 = container.querySelector(".bottom_line");
     line2.innerText = worker["login"] + "\t" + "часы: " + worker["hours"];
 
@@ -46,8 +46,10 @@ workers_list.prototype._load_photo = function (worker, img){
     img.setAttribute('src', "../static/data/no_photo.png");
 
     this.api.sendRequest(this.api.get_token_params(), this.api.path_getPhoto, function (request) {
+        worker['photo'] = null;
         if (request.response === "NO PHOTO")
             return;
+        worker['photo'] = request.response;
         img.setAttribute('src', "data:image/jpg;base64," + request.response);
     }.bind(this), body, true);
 }
@@ -63,11 +65,47 @@ workers_list.prototype._popup_user = function (user){
 
 workers_list.prototype.init_target_user_UI = function (worker) {
     const container = this.init_worker_UI(worker);
-    this.add_delete_btn(container, worker);
+    this.setPhotoEvent(container, worker);
+
     this.sendNotificationLine(container, worker);
     this.add_map(container, worker);
+    this.add_delete_btn(container, worker);
 
     return container;
+}
+
+workers_list.prototype.setPhotoEvent = function (container, worker) {
+    img = container.querySelector("img");
+
+    img.onmouseover = img.onmouseout = function (event) {
+        if (event.type === 'mouseover')
+        this.setAttribute('src', "../static/data/load_photo.png");
+    if (event.type === 'mouseout')
+        this.setAttribute('src', worker['photo'] === null ? "../static/data/no_photo.png" : "data:image/jpg;base64," + worker['photo']);
+    }
+    
+    img.onclick = function () {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.setAttribute('accept', ".jpg, .jpeg");
+
+        input.onchange = function (e) {
+           const file = e.target.files[0];
+           const reader = new FileReader();
+           reader.onload = function(event) {
+               let dataUri = event.target.result;
+               dataUri = dataUri.substring(dataUri.indexOf("base64,") + 7);
+               this.api.push_photo(worker['login'], dataUri, function (request) {
+                   alert(request.response);
+                   worker["photo"] = dataUri;
+               }.bind(this));
+           }.bind(this);
+
+           reader.readAsDataURL(file);
+        }.bind(this);
+
+        input.click();
+    }.bind(this);
 }
 
 workers_list.prototype.sendNotificationLine = function (container, worker) {

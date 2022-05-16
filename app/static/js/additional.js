@@ -1,5 +1,8 @@
-function wrap(element, tag) {
+function wrap(element, tag, attributes={}) {
     let wrapper = document.createElement(tag);
+    for (const key of Object.keys(attributes))
+        wrapper.setAttribute(key, attributes[key]);
+
     wrapper.appendChild(element);
     return wrapper;
 }
@@ -44,6 +47,9 @@ function get_request_body(path, type, params, body){
 }
 
 function addRow(container, elements) {
+    const row = document.createElement('tr');
     for (const element of elements)
-        container.querySelector('.tbody').appendChild(wrap(element, 'tr'));
+        row.appendChild(element);
+    row.classList.add('row')
+    container.querySelector('tbody').appendChild(row);
 }

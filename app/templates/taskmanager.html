@@ -22,8 +22,32 @@
     </form>
 
 </div>
-<table id="project_info" class="table"></table>
-<table id="task_container" class="table">
+<table id="project_info" class="table border-black">
+    <tbody></tbody>
+</table>
+
+<table class="table">
+    <tbody>
+    <tr>
+        <td>Статус</td>
+        <td rowspan="2"><button id="add_task" class="menu_button width-100">+ Добавить новый таск</button></td>
+    </tr>
+    <tr>
+        <td>
+    <select id="status">
+        <option class="all">Все</option>
+        <option class="new">new</option>
+        <option class="progress">progress</option>
+        <option class="finished">finished</option>
+        <option class="approving">approving</option>
+    </select>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table id="task_container" class="table border-black">
+    <tbody></tbody>
 </table>
 
     <script src="../static/js/api.js"></script>
@@ -34,12 +58,13 @@
       {#document.getElementById("popup").addEventListener('click', popup_close);#}
       const API = new api("{{ url }}", "{{ api_url }}", "{{ token }}");
       let userInfo = null;
+      let project_Info = null;
+      let taskController = null;
       API.get_user_info(function (request) {
           userInfo = JSON.parse(request.response);
+          project_Info = new projectInfo(document.getElementById("project_info"), "{{ name }}", "{{ creator }}", "{{ description }}")
+          taskController = new taskmanager(document.getElementById("task_container"), project_Info);
       });
-
-      const project_Info = new projectInfo(document.getElementById("project_info"), "{{ name }}", "{{ creator }}", "{{ description }}")
-      const taskController = new taskmanager(document.getElementById("task_container"), project_Info);
     </script>
 </body>
 </html>
