@@ -21,7 +21,7 @@ register.prototype.try_register = function () {
         }
     }
     this.api.register(body, function (request) {
-        window.location.href = "main_page"
+        window.location = API.web_url;
     }.bind(this))
     return false;
 }
