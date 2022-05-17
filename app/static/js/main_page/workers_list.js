@@ -151,7 +151,7 @@ workers_list.prototype.add_map = function(container, worker) {
     td.appendChild(mapDiv);
     row.appendChild(td);
     container.querySelector("tbody").appendChild(row);
-    container.classList.add('current_user');
+    container.classList.add('width-98');
 
     let line1 = container.querySelector(".top_line_2");
     line1.innerText = "";

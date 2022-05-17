@@ -30,10 +30,10 @@ projectInfo.prototype.fill_info = function () {
     cells.push(wrap(nameHeader, 'td'));
     cells[1].appendChild(inputCreator);
 
-    const btn = document.createElement('button');
+    let btn = document.createElement('button');
     btn.innerText = "Сохранить изменения";
     btn.onclick = this.update_project.bind(this, inputName, inputCreator, inputDescr);
-    cells.push(wrap(btn, 'td', {"rowspan":2}));
+    cells.push(wrap(btn, 'td'));
 
 
     addRow(this.c, cells);
@@ -43,11 +43,40 @@ projectInfo.prototype.fill_info = function () {
     nameHeader.innerText = "Описание";
     let cell = wrap(nameHeader, 'td', {"colspan": 2})
     cell.appendChild(inputDescr);
-    addRow(this.c, [cell]);
+
+    btn = document.createElement('button');
+    btn.innerText = "Удалить";
+    btn.onclick = this.delete_project.bind(this, this.pname, this.creator);
+
+    addRow(this.c, [cell, wrap(btn, 'td')]);
 
 }
 
+
+projectInfo.prototype.delete_project = function (pname, creator){
+    API.delete_project(pname, creator, function () {
+        document.getElementById('logo').click();
+    }.bind(this));
+}
+
+
 projectInfo.prototype.update_project = function (pname, creator, description) {
+    if (is_new){
+        let project_update = {
+        "project_name" : pname.value,
+        "project_description" : description.value
+        }
+        API.add_project(project_update, function (request) {
+            alert(request.response);
+            this.pname = pname.value;
+            this.creator = creator.value;
+            this.description = description.value;
+            is_new = false;
+        }.bind(this));
+        return
+    }
+
+
     let project_update = {
     "old_project_name" : this.pname,
     "project_name" : pname.value,
@@ -59,6 +88,9 @@ projectInfo.prototype.update_project = function (pname, creator, description) {
         project_update["old_project_creator_login"] = this.creator;
 
     API.update_project(project_update, function (request) {
+        this.pname = pname.value;
+        this.creator = creator.value;
+        this.description = description.value;
         alert(request.response);
     }.bind(this));
 }

@@ -24,10 +24,15 @@ function popup_close(e) {
     popup.setAttribute('class', 'popup');
 }
 
+function new_project() {
+    const project = {"project_name": "",  "project_description": "", "project_creator_login": mainController.userInfo["login"]}
+    post_redirect("taskmanager", project);
+}
+
 function post_redirect(url, data) {
     var form = document.createElement('form');
     document.body.appendChild(form);
-    form.target = '_blank';
+    // form.target = '_blank';
     form.method = 'post';
     form.action = url;
     for (var name in data) {
@@ -53,3 +58,20 @@ function addRow(container, elements) {
     row.classList.add('row')
     container.querySelector('tbody').appendChild(row);
 }
+
+function setMouseOver(elements) {
+    for (const element of elements)
+        element.onmouseout = element.onmouseover = overEvent;
+}
+
+task_template = {
+        "creator_login": "",
+        "project_name": "",
+        "task_name": "new",
+        "task_description": "",
+        "start_time": "2021-04-15T21:00:00.000+00:00",
+        "end_time": "2021-04-15T24:00:00.000+00:00",
+        "status": "NEW",
+        "progress": "",
+        "worker_login": ""
+    }

@@ -21,12 +21,20 @@
         <p><input type="submit" class="menu_button" value="Общая статистика" /></p>
     </form>
 
-    <form class="menu" action="register">
-        <p><input type="submit" class="menu_button" value="Регистрация сотрудника" /></p>
-    </form>
+
 </div>
 <div>
 <table class="table">
+    <tr>
+        <td class="column">
+            <form class="menu width-100" action="register">
+            <p><input type="submit" class="menu_button width-50 height-50px" value="Регистрация сотрудника" /></p>
+            </form>
+        </td>
+        <td>
+            <button id="add_project" class="menu_button width-50 height-50px">+ Новый проект</button>
+        </td>
+    </tr>
     <tr>
         <td id="user_list" class="column">
             <table id="user_template" class="row close">
@@ -73,8 +81,11 @@
     <script src="../static/js/main_page/workers_list.js"></script>
     <script src="../static/js/main_page/main.js"></script>
 	<script>
+
+
       document.getElementById("popup").addEventListener('click', popup_close);
       var mainController = new main('{{ url }}', '{{ api_url }}', '{{ token }}');
+      document.getElementById('add_project').onclick = new_project;
     </script>
 </body>
 </html>

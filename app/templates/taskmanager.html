@@ -35,18 +35,19 @@
     <tr>
         <td>
     <select id="status">
-        <option class="all">Все</option>
-        <option class="new">new</option>
-        <option class="progress">progress</option>
-        <option class="finished">finished</option>
-        <option class="approving">approving</option>
+        <option class="all">...</option>
+        <option class="new">NEW</option>
+        <option class="progress">PROGRESS</option>
+        <option class="finished">FINISHED</option>
+        <option class="approving">APPROVING</option>
+        <option class="approving">REJECTED</option>
     </select>
         </td>
     </tr>
     </tbody>
 </table>
 
-<table id="task_container" class="table border-black">
+<table id="task_container" class="table">
     <tbody></tbody>
 </table>
 
@@ -55,8 +56,8 @@
     <script src="../static/js/tasks/taskmanager.js"></script>
     <script src="../static/js/tasks/projectInfo.js"></script>
 	<script>
-      {#document.getElementById("popup").addEventListener('click', popup_close);#}
       const API = new api("{{ url }}", "{{ api_url }}", "{{ token }}");
+      let is_new = {{ is_new }};
       let userInfo = null;
       let project_Info = null;
       let taskController = null;
@@ -65,6 +66,10 @@
           project_Info = new projectInfo(document.getElementById("project_info"), "{{ name }}", "{{ creator }}", "{{ description }}")
           taskController = new taskmanager(document.getElementById("task_container"), project_Info);
       });
+
+      document.getElementById('logo').onclick = function (event) {
+            window.location = API.web_url;
+        }
     </script>
 </body>
 </html>

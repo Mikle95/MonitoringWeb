@@ -5,16 +5,39 @@ function api(url, host, token){
 
     this.path_myWorkers = host + "api/v1/all/user";
     this.path_user_activity = host + "api/v1/user/activity";
-    this.path_allProjects = host + "api/v1/all/project"
     this.path_getPhoto = host + "api/v1/user/photo";
     this.path_myInfo = host + "api/v1/info/user";
     this.path_register = host + "api/v1/register/user";
     this.path_geo = host + "api/v1/geolocation/get"
     this.path_delete_user =  host + "api/v1/delete/user";
     this.path_notification = host + "api/v1/firebase/notification";
-    this.path_update_project = host + "api/v1/update/project";
     this.path_push_photo = host + "api/v1/photo/register";
+
+    this.path_allProjects = host + "api/v1/all/project"
+    this.path_update_project = host + "api/v1/update/project";
+    this.path_delete_project = host + "api/v1/delete/project";
+    this.path_add_project = host + "api/v1/create/project";
+
     this.path_get_project_tasks = host + "api/v1/project/task";
+    this.path_task_update = host + "api/v1/update/task";
+    this.path_add_task = host + "api/v1/create/task";
+}
+
+api.prototype.add_task = function (task, callback) {
+    this.sendRequest(this.get_token_params(), this.path_add_task, callback,
+        task, true);
+}
+
+api.prototype.task_update = function (task, callback) {
+    this.sendRequest(this.get_token_params(), this.path_task_update, callback,
+        task, true);
+}
+
+api.prototype.delete_project = function (pname, creator, callback) {
+    const params = this.get_token_params();
+    params["soft"]=false;
+    this.sendRequest(params, this.path_delete_project, callback,
+        {"project_name": pname, "project_creator_login": creator}, true);
 }
 
 api.prototype.get_project_tasks = function (pname, creator, callback) {
@@ -25,6 +48,10 @@ api.prototype.get_project_tasks = function (pname, creator, callback) {
 api.prototype.push_photo = function (login, photo, callback) {
     this.sendRequest(this.get_token_params(), this.path_push_photo, callback,
         {"photo": photo, "login": login}, true);
+}
+
+api.prototype.add_project = function (project, callback) {
+    this.sendRequest(this.get_token_params(), this.path_add_project, callback, project, true);
 }
 
 api.prototype.update_project = function (project, callback) {

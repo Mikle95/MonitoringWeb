@@ -68,8 +68,14 @@ html {
     width: 100%;
 }
 
-.current_user{
+.width-98{
     width: 98%;
+}
+
+.width-50{
+    width: 50%;
+    margin-left: 50%;
+    transform: translate(-50%, 0%);
 }
 
 .height-50px{
@@ -111,6 +117,12 @@ html {
 
 .over{
     background-color: white;
+}
+
+.menu_button:hover {
+    color: white;
+    background-color: rebeccapurple;
+    border-width: 0;
 }
 
 .menu_button {

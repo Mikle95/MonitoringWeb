@@ -17,7 +17,8 @@ def taskmanager():
         return ret
     return render_template("taskmanager.html", api_url=api.api_host, token=current_user.token, url=api.url,
                            name=request.form["project_name"], creator=request.form["project_creator_login"],
-                           description=request.form["project_description"])
+                           description=request.form["project_description"],
+                           is_new=str(request.form["project_name"] == "").lower())
 
 
 @app.route('/register/', methods=["GET"])
