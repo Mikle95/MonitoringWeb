@@ -67,12 +67,47 @@ workers_list.prototype.init_target_user_UI = function (worker) {
     const container = this.init_worker_UI(worker);
     this.setPhotoEvent(container, worker);
 
-    this.sendNotificationLine(container, worker);
     this.add_map(container, worker);
+    this.add_bottom_table(container, worker);
+    // this.sendNotificationLine(container, worker);
     this.add_delete_btn(container, worker);
 
     return container;
 }
+
+
+workers_list.prototype.add_bottom_table = function (container, worker) {
+    const tbody = container.querySelector("tbody")
+    let row = document.createElement('tr');
+    tbody.appendChild(row);
+    row.innerHTML = "<td></td><td class='column'>Активность</td>";
+    let td = document.createElement('td');
+    row.appendChild(td);
+    this.sendNotificationLine(td, worker);
+
+    row = document.createElement('tr');
+    row.append(document.createElement("td"));
+    tbody.appendChild(row);
+    td = document.createElement('td');
+    row.appendChild(td);
+    this.add_activity_story(td, worker);
+}
+
+
+workers_list.prototype.add_activity_story = function (container, worker) {
+    this.api.get_user_activity(worker["login"], function (request) {
+        let mas = JSON.parse(request.response).reverse();
+        for (const activity of mas){
+            const div = document.createElement('div');
+            div.innerHTML = '<div>Start time: ' + activity["start_time"] + '</div>';
+            div.innerHTML += '<div>End time: ' + activity["end_time"] + '</div>';
+            div.classList.add("row");
+            div.classList.add("border-black");
+            container.appendChild(div);
+        }
+    }.bind(this));
+}
+
 
 workers_list.prototype.setPhotoEvent = function (container, worker) {
     img = container.querySelector("img");
@@ -109,9 +144,9 @@ workers_list.prototype.setPhotoEvent = function (container, worker) {
 }
 
 workers_list.prototype.sendNotificationLine = function (container, worker) {
-    let row = document.createElement("tr");
-    let td = document.createElement("td");
-    td.setAttribute("colspan", 3);
+    // let row = document.createElement("tr");
+    // let td = document.createElement("td");
+    // td.setAttribute("colspan", 3);
     let text = document.createElement('input');
     text.setAttribute('type', "text")
     let btn = document.createElement('button');
@@ -120,9 +155,10 @@ workers_list.prototype.sendNotificationLine = function (container, worker) {
         this.api.send_notification(worker["login"], text.value);
     }.bind(this));
 
-    td.append(text, btn);
-    row.appendChild(td);
-    container.appendChild(row);
+    // td.append(text, btn);
+    // row.appendChild(td);
+    container.appendChild(text);
+    container.appendChild(btn);
 }
 
 workers_list.prototype.add_delete_btn = function (container, worker){

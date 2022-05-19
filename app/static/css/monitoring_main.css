@@ -141,6 +141,11 @@ html {
     border: 1px solid grey;
 }
 
+.scrollable {
+    overflow-y: scroll;
+    max-height: 600px;
+}
+
 /*#project_list {*/
 /*    background-color: chartreuse;*/
 /*}*/

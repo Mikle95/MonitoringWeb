@@ -23,6 +23,13 @@ function api(url, host, token){
     this.path_add_task = host + "api/v1/create/task";
 }
 
+
+api.prototype.get_user_activity = function (login, callback) {
+    this.sendRequest(this.get_token_params(), this.path_user_activity, callback,
+        {"login": login}, true);
+}
+
+
 api.prototype.add_task = function (task, callback) {
     this.sendRequest(this.get_token_params(), this.path_add_task, callback,
         task, true);
