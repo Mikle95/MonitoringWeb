@@ -91,8 +91,10 @@ def refresh():
 def refresh_token():
     flag, ret = refresh()
     next_page = request.args.get('next')
-    if not next_page or url_parse(next_page).netloc != '' or not flag:
+    if not flag:
         next_page = ret
+    if not next_page or url_parse(next_page).netloc != '':
+        next_page = redirect(url_for('main_page'))
     return next_page
 
 

@@ -2,8 +2,9 @@ function api(url, host, token){
     this.web_url = url;
     this.api_url = host;
     this.token = token;
+    this.is_authorized = true;
 
-    this.path_myWorkers = host + "api/v1/all/user";
+    this.path_myWorkers = host + "api/v1/getWorkers";
     this.path_user_activity = host + "api/v1/user/activity";
     this.path_getPhoto = host + "api/v1/user/photo";
     this.path_myInfo = host + "api/v1/info/user";
@@ -13,14 +14,27 @@ function api(url, host, token){
     this.path_notification = host + "api/v1/firebase/notification";
     this.path_push_photo = host + "api/v1/photo/register";
 
-    this.path_allProjects = host + "api/v1/all/project"
+    this.path_allProjects = host + "api/v1/my/project"
     this.path_update_project = host + "api/v1/update/project";
     this.path_delete_project = host + "api/v1/delete/project";
     this.path_add_project = host + "api/v1/create/project";
+    this.path_get_project_users = host + "api/v1/project/workers"
+    this.path_add_user_to_project = host + "api/v1/add_user/project"
 
     this.path_get_project_tasks = host + "api/v1/project/task";
     this.path_task_update = host + "api/v1/update/task";
     this.path_add_task = host + "api/v1/create/task";
+
+}
+
+api.prototype.get_project_users = function (pname, creator, callback) {
+    this.sendRequest(this.get_token_params(), this.path_get_project_users, callback,
+        {"project_name": pname, "project_creator_login": creator}, true);
+}
+
+api.prototype.add_user_to_project = function (body, callback) {
+    this.sendRequest(this.get_token_params(), this.path_add_user_to_project, callback,
+        body, true);
 }
 
 
@@ -42,7 +56,7 @@ api.prototype.task_update = function (task, callback) {
 
 api.prototype.delete_project = function (pname, creator, callback) {
     const params = this.get_token_params();
-    params["soft"]=false;
+    params["soft"]=true;
     this.sendRequest(params, this.path_delete_project, callback,
         {"project_name": pname, "project_creator_login": creator}, true);
 }
@@ -106,9 +120,15 @@ api.prototype.sendRequest = function(params, path, callback, body=null, is_post=
         }
         else
             if (request.readyState === 4) {
-                alert(JSON.parse(request.response)["message"]);
-                if (request.status === 401)
-                    window.location = this.web_url + "refresh_token";
+                if(request.status === 401) {
+                    if (this.is_authorized) {
+                        this.is_authorized = false;
+                        alert(JSON.parse(request.response)["message"]);
+                        window.location = this.web_url + "refresh_token";
+                    }
+                }
+                else
+                    alert(JSON.parse(request.response)["message"]);
             }
     })
     request.send(JSON.stringify(req_body));

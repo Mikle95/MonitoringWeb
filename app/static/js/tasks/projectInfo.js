@@ -3,7 +3,23 @@ function projectInfo(container, project_name, creator_login, description) {
     this.pname = project_name;
     this.creator = creator_login;
     this.description = description;
+    this.users = [];
+    this.get_users();
     this.fill_info();
+}
+
+projectInfo.prototype.checkUser = function (login) {
+    for (const user of this.users)
+        if (user === login)
+            return true;
+    return false;
+}
+
+projectInfo.prototype.get_users = function () {
+    API.get_project_users(this.pname, this.creator, function (request) {
+        for (let user of JSON.parse(request.response))
+            this.users.push(user["login"])
+    }.bind(this));
 }
 
 projectInfo.prototype.fill_info = function () {

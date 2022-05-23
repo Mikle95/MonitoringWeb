@@ -127,8 +127,19 @@ taskmanager.prototype.input_time_update = function (param_name, task, input) {
 taskmanager.prototype.update_task_value = function (param_name, task, value) {
     let new_task = structuredClone(task);
     new_task[param_name] = value;
-    API.task_update(new_task, function (request) {
+
+    let callback = function (request) {
         task[param_name] = value;
         this.fill_list();
-    }.bind(this));
+    }.bind(this);
+
+    if (param_name === "worker_login" && !(project_Info.checkUser(value))) {
+        let body = {"user_login":value, "project_name":this.project.pname, "project_creator_login": this.project.creator};
+        API.add_user_to_project(body, function (request) {
+            project_Info.users.push(value);
+            API.task_update(new_task, callback);
+        }.bind(this));
+    }
+
+    API.task_update(new_task, callback);
 }

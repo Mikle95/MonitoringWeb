@@ -204,7 +204,7 @@ workers_list.prototype.add_map = function(container, worker) {
                 }
                 mapDiv.innerHTML = "";
                 mapDiv.setAttribute("class", "map");
-                const geo = JSON.parse(request.response)[0];
+                const geo = JSON.parse(request.response).at(-1);
                 initMap([geo["latitude"], geo["longitude"]]);
             }.bind(this), {"login": worker["login"]}, true);
     }.bind(this));
