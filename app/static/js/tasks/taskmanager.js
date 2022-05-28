@@ -1,6 +1,9 @@
 function taskmanager(container, project) {
-    this.selector = document.querySelector('select');
-    this.selector.onchange = this.fill_list.bind(this);
+    this.selector_status = document.getElementById('status');
+    this.selector_status.onchange = this.fill_list.bind(this);
+
+    this.selector_worker = document.getElementById('worker');
+    this.selector_worker.onchange = this.fill_list.bind(this);
 
     document.getElementById('add_task').onclick = function () {
         const new_task = structuredClone(task_template);
@@ -20,6 +23,15 @@ function taskmanager(container, project) {
 
 }
 
+taskmanager.prototype.set_user_filter = function () {
+    this.selector_worker.innerHTML = "<option class='all'>...</option>";
+    for (const worker of this.project.users){
+        const op = document.createElement('option');
+        op.innerText = worker;
+        this.selector_worker.appendChild(op);
+    }
+}
+
 taskmanager.prototype.refresh = function () {
     API.get_project_tasks(this.project.pname, this.project.creator, function (request) {
         this.data = JSON.parse(request.response);
@@ -29,10 +41,17 @@ taskmanager.prototype.refresh = function () {
 
 taskmanager.prototype.fill_list = function () {
     this.c.querySelector("tbody").innerHTML = "";
-    for (const task of this.data.reverse())
-        if (this.selector.value.toLowerCase() === "..." ||
-            task["status"].toLowerCase() === this.selector.value.toLowerCase())
+    this.sort_data();
+    for (const task of this.data)
+        if ((this.selector_status.value.toLowerCase() === "..." ||
+            task["status"].toLowerCase() === this.selector_status.value.toLowerCase()) &&
+            (this.selector_worker.value.toLowerCase() === "..." ||
+            task["worker_login"] === this.selector_worker.value))
             addRow(this.c, [wrap(this.init_task_UI(task), 'td')]);
+}
+
+taskmanager.prototype.sort_data = function () {
+    this.data.sort(compare_End_time);
 }
 
 taskmanager.prototype.init_task_UI = function (task) {
@@ -52,7 +71,7 @@ taskmanager.prototype.init_task_UI = function (task) {
     cells.push(this.text_cell("Ответственный:", "worker_login", task));
     cells.push(this.text_cell("Прогресс:", "progress", task));
 
-    text = this.selector.cloneNode(true);
+    text = this.selector_status.cloneNode(true);
     text.querySelector('.all').remove();
     if (task["status"] !== null)
         text.querySelector("." + task["status"].toLowerCase()).setAttribute("selected", "selected");
@@ -139,6 +158,7 @@ taskmanager.prototype.update_task_value = function (param_name, task, value) {
             project_Info.users.push(value);
             API.task_update(new_task, callback);
         }.bind(this));
+        return
     }
 
     API.task_update(new_task, callback);

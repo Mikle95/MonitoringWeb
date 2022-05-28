@@ -64,6 +64,10 @@ function setMouseOver(elements) {
         element.onmouseout = element.onmouseover = overEvent;
 }
 
+function compare_End_time(a, b) {
+        return  a["end_time"] > b ["end_time"] ? 1 : -1;
+    }
+
 task_template = {
         "creator_login": "",
         "project_name": "",

@@ -16,9 +16,14 @@ projectInfo.prototype.checkUser = function (login) {
 }
 
 projectInfo.prototype.get_users = function () {
+    if (is_new){
+        this.users.push(this.creator);
+        return;
+    }
     API.get_project_users(this.pname, this.creator, function (request) {
         for (let user of JSON.parse(request.response))
             this.users.push(user["login"])
+        taskController.set_user_filter();
     }.bind(this));
 }
 
@@ -88,6 +93,9 @@ projectInfo.prototype.update_project = function (pname, creator, description) {
             this.creator = creator.value;
             this.description = description.value;
             is_new = false;
+
+            project_update["project_creator_login"] = creator.value
+            post_redirect(API.web_url + "taskmanager", project_update);
         }.bind(this));
         return
     }

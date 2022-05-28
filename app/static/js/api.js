@@ -56,7 +56,7 @@ api.prototype.task_update = function (task, callback) {
 
 api.prototype.delete_project = function (pname, creator, callback) {
     const params = this.get_token_params();
-    params["soft"]=true;
+    params["soft"]=false;
     this.sendRequest(params, this.path_delete_project, callback,
         {"project_name": pname, "project_creator_login": creator}, true);
 }
