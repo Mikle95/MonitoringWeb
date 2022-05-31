@@ -20,6 +20,10 @@ register.prototype.try_register = function () {
             this.c[i].setAttribute('class', "error");
         }
     }
+
+    if (!flag)
+        return false;
+
     this.api.register(body, function (request) {
         window.location = this.api.web_url;
     }.bind(this))

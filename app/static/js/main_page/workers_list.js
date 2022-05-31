@@ -148,6 +148,7 @@ workers_list.prototype.sendNotificationLine = function (container, worker) {
     // let td = document.createElement("td");
     // td.setAttribute("colspan", 3);
     let text = document.createElement('input');
+    text.setAttribute("class", "width-98");
     text.setAttribute('type', "text")
     let btn = document.createElement('button');
     btn.innerText = "Отправить уведомление";
